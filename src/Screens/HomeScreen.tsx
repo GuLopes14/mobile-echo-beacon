@@ -2,21 +2,18 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-
 export default function HomeScreen() {
-    const navigation = useNavigation();
-    return (
-    
+  const navigation = useNavigation();
+
+  return (
     <View style={styles.container}>
-      <Text style={styles.title}>ECHOBEACON</Text>
-      <Text style={styles.time}>10:31 AM</Text>
+      <Text style={styles.titulo}>ECHOBEACON</Text>
+      <Text style={styles.tempo}>10:31 AM</Text>
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>VINCULAR TAG</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>VISUALIZAR MOTOS</Text>
+      <TouchableOpacity
+        style={styles.botao}
+      >
+        <Text style={styles.botaoTexto}>Visualizar Motos</Text>
       </TouchableOpacity>
     </View>
   );
@@ -30,30 +27,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20
   },
-  gear: {
-    position: 'absolute',
-    top: 40,
-    right: 20
-  },
-  title: {
+  titulo: {
     fontSize: 24,
     color: '#fff',
     fontWeight: 'bold',
     marginBottom: 5
   },
-  time: {
+  tempo: {
     fontSize: 18,
     color: '#fff',
     marginBottom: 40
   },
-  button: {
+  botao: {
     backgroundColor: '#00FF00',
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 25,
     marginVertical: 10
   },
-  buttonText: {
+  botaoTexto: {
     color: '#000',
     fontWeight: 'bold'
   }

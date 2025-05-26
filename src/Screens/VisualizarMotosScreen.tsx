@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+  Modal
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
-type Moto = {
-  id: string;
-  modelo: string;
-  placa: string;
-  chassi: string;
-  problema: string;
-  status: 'recepcao' | 'patio';
-};
+import { Moto } from '../types/types';
 
 export default function VisualizarMotosScreen() {
   const [motos, setMotos] = useState<Moto[]>([]);
   const [loading, setLoading] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisivel, setModalVisivel] = useState(false);
   const [motoSelecionada, setMotoSelecionada] = useState<Moto | null>(null);
 
   useEffect(() => {
@@ -33,40 +33,44 @@ export default function VisualizarMotosScreen() {
   const abrirModal = (moto: Moto) => {
     if (moto.status === 'patio') {
       setMotoSelecionada(moto);
-      setModalVisible(true);
+      setModalVisivel(true);
     }
   };
 
   const fecharModal = () => {
-    setModalVisible(false);
+    setModalVisivel(false);
     setMotoSelecionada(null);
   };
 
-  const renderMoto = (moto: Moto, icon: 'add-circle-outline' | 'location') => (
-    <View key={moto.id} style={styles.card}>
+  const renderMoto = (moto: Moto, icone: 'add-circle-outline' | 'location') => (
+    <View key={moto.id} style={styles.cartao}>
       <View>
         <Text style={styles.modelo}>{moto.modelo}</Text>
-        <Text style={styles.info}>{moto.placa}</Text>
-        <Text style={styles.info}>{moto.chassi}</Text>
-        <Text style={styles.info}>{moto.problema}</Text>
+        <Text style={styles.info}>Placa: {moto.placa}</Text>
+        <Text style={styles.info}>Chassi: {moto.chassi}</Text>
+        <Text style={styles.info}>Problema: {moto.problema}</Text>
       </View>
 
-      {icon === 'location' ? (
+      {icone === 'location' ? (
         <TouchableOpacity onPress={() => abrirModal(moto)}>
-          <Ionicons name={icon} size={20} color="#fff" />
+          <Ionicons name={icone} size={20} color="#fff" />
         </TouchableOpacity>
       ) : (
-        <Ionicons name={icon} size={20} color="#fff" />
+        <Ionicons name={icone} size={20} color="#fff" />
       )}
     </View>
   );
 
-  const renderLista = (status: 'recepcao' | 'patio', titulo: string, icon: 'add-circle-outline' | 'location') => {
+  const renderLista = (
+    status: 'recepcao' | 'patio',
+    titulo: string,
+    icone: 'add-circle-outline' | 'location'
+  ) => {
     const filtradas = motos.filter(m => m.status === status);
     return (
       <>
-        <Text style={styles.subheader}>{titulo}</Text>
-        {filtradas.map(moto => renderMoto(moto, icon))}
+        <Text style={styles.subtitulo}>{titulo}</Text>
+        {filtradas.map(moto => renderMoto(moto, icone))}
       </>
     );
   };
@@ -82,21 +86,21 @@ export default function VisualizarMotosScreen() {
   return (
     <>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.header}>Motos a trabalhar</Text>
-        {renderLista('recepcao', 'Na recepção/pendente', 'add-circle-outline')}
+        <Text style={styles.titulo}>Lista de Motos</Text>
+        {renderLista('recepcao', 'Na recepção', 'add-circle-outline')}
         {renderLista('patio', 'No pátio', 'location')}
       </ScrollView>
 
-      <Modal visible={modalVisible} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalBox}>
-            <Text style={styles.modalText}>Deseja localizar a moto?</Text>
-            <View style={styles.modalButtons}>
-              <TouchableOpacity style={styles.btnSim} onPress={() => fecharModal()}>
-                <Text style={styles.btnText}>SIM</Text>
+      <Modal visible={modalVisivel} transparent animationType="fade">
+        <View style={styles.sobreposicaoModal}>
+          <View style={styles.caixaModal}>
+            <Text style={styles.textoModal}>Deseja localizar esta moto?</Text>
+            <View style={styles.botoesModal}>
+              <TouchableOpacity style={styles.botaoSim} onPress={fecharModal}>
+                <Text style={styles.textoBotao}>Sim</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.btnVoltar} onPress={fecharModal}>
-                <Text style={styles.btnText}>VOLTAR</Text>
+              <TouchableOpacity style={styles.botaoVoltar} onPress={fecharModal}>
+                <Text style={styles.textoBotao}>Voltar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -109,18 +113,17 @@ export default function VisualizarMotosScreen() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    minHeight: '100%',
     backgroundColor: '#121212',
     paddingTop: 60,
     paddingHorizontal: 20
   },
-  header: {
+  titulo: {
     fontSize: 22,
     color: '#fff',
     fontWeight: 'bold',
     marginBottom: 20
   },
-  subheader: {
+  subtitulo: {
     backgroundColor: '#3a3735',
     color: '#fff',
     padding: 10,
@@ -128,14 +131,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontWeight: 'bold'
   },
-  card: {
+  cartao: {
     backgroundColor: '#1e1e1e',
     padding: 15,
     borderRadius: 10,
     marginTop: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start'
+    justifyContent: 'space-between'
   },
   modelo: {
     fontSize: 16,
@@ -146,40 +148,40 @@ const styles = StyleSheet.create({
     color: '#aaa',
     fontSize: 13
   },
-  modalOverlay: {
+  sobreposicaoModal: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
     alignItems: 'center'
   },
-  modalBox: {
+  caixaModal: {
     backgroundColor: '#3a3735',
     padding: 25,
     borderRadius: 10,
     alignItems: 'center'
   },
-  modalText: {
+  textoModal: {
     color: '#fff',
     fontSize: 16,
     marginBottom: 15
   },
-  modalButtons: {
+  botoesModal: {
     flexDirection: 'row',
     gap: 15
   },
-  btnSim: {
+  botaoSim: {
     backgroundColor: '#00cc00',
     paddingVertical: 8,
     paddingHorizontal: 18,
     borderRadius: 6
   },
-  btnVoltar: {
+  botaoVoltar: {
     backgroundColor: '#cc0000',
     paddingVertical: 8,
     paddingHorizontal: 18,
     borderRadius: 6
   },
-  btnText: {
+  textoBotao: {
     color: '#fff',
     fontWeight: 'bold'
   }

@@ -1,9 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../Screens/HomeScreen';
 import { Ionicons } from '@expo/vector-icons';
+
+import HomeScreen from '../Screens/HomeScreen';
 import VisualizarMotosScreen from '../Screens/VisualizarMotosScreen';
 import CadastrarEchoBeaconScreen from '../Screens/CadastrarEchoBeaconScreen';
+import PerfilUsuarioScreen from '../Screens/PerfilUsuarioScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -12,15 +14,16 @@ export default function TabNavigator() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
-          let iconName;
+          let iconName = 'home';
 
           if (route.name === 'Início') iconName = 'home';
-          else if (route.name === 'Motos') iconName = 'bicycle';
-          else if (route.name === 'Adicionar') iconName = 'add-circle';
-          else if (route.name === 'Perfil') iconName = 'person';
+          if (route.name === 'Motos') iconName = 'bicycle';
+          if (route.name === 'Adicionar') iconName = 'add-circle';
+          if (route.name === 'Perfil') iconName = 'person';
 
           return <Ionicons name={iconName as any} size={size} color={color} />;
         },
+        tabBarShowLabel: false,
         tabBarActiveTintColor: '#00FF00',
         tabBarInactiveTintColor: 'gray',
         headerShown: false,
@@ -33,7 +36,7 @@ export default function TabNavigator() {
       <Tab.Screen name="Início" component={HomeScreen} />
       <Tab.Screen name="Motos" component={VisualizarMotosScreen} />
       <Tab.Screen name="Adicionar" component={CadastrarEchoBeaconScreen} />
-      <Tab.Screen name="Perfil" component={HomeScreen} />
+      <Tab.Screen name="Perfil" component={PerfilUsuarioScreen} />
     </Tab.Navigator>
   );
 }
